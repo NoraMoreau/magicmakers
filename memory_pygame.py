@@ -19,8 +19,15 @@ espacement_des_cartes = 10
 nb_lignes = 4
 nb_colonnes = 4
 
-# Creation de la police pour le texte
-typo = pygame.font.Font(None, 50)
+# Creation du chemin de simages
+images = ["image1.png", 
+          "image2.png", 
+          "image3.png", 
+          "image4.png", 
+          "image5.png", 
+          "image6.png", 
+          "image7.png", 
+          "image8.png"]
 
 # Calculer le nombre de paires nécessaires
 nombre_de_paires = (nb_lignes * nb_colonnes) // 2
@@ -35,6 +42,13 @@ paires = nombres * 2
 random.shuffle(paires)
 # Afficher en concole les paires mélangées
 print(paires)
+
+# Chargement des images et redimensionnement
+liste_images = []
+for image in images:
+    image = pygame.image.load(image)
+    image = pygame.transform.scale(image, (carte_largeur, carte_hauteur))
+    liste_images.append(image)
 
 # Création de la grille de cartes
 cartes = []
@@ -99,25 +113,16 @@ while True:
                             # Retourne les cartes face cachée si elles ne sont pas identiques
                             cartes_retournees[0]['carte_retournee'] = False
                             cartes_retournees[1]['carte_retournee'] = False
-                            # Pause d'une seconde pour que le joueur puisse voir les cartes
-                            pygame.time.delay(1000)
                         # On réinitialise la liste des cartes retournées
                         cartes_retournees = []
 
     # Dessiner les cartes
     for carte in cartes:
-        if carte['carte_retournee']:
-            # On dessine la carte face visible
-            pygame.draw.rect(fenetre, blanc, carte["dessin_carte"])
-            # on crée une surface de texte avec la valeur de la carte
-            texte_surface = typo.render(carte["valeur_carte"], True, bleu)
-            # on obtient le rectangle englobant le texte et le centre sur la carte
-            texte_rect = texte_surface.get_rect(center=carte["dessin_carte"].center)
-            # Et on utilise Blit pour "dessiner" le texte sur la fenêtre
-            fenetre.blit(texte_surface, texte_rect)     
+        if carte["carte_retournee"]:
+            fenetre.blit(liste_images[int(carte["valeur_carte"])], carte["dessin_carte"])
         else:
             # On dessine la carte face cachée
             pygame.draw.rect(fenetre, blanc, carte["dessin_carte"])
-
+    
     pygame.display.update()
 
